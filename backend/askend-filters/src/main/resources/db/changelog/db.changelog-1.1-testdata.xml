@@ -1,0 +1,70 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="2" author="aemiljan" runOnChange="true">
+
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*) FROM filters;
+            </sqlCheck>
+        </preConditions>
+
+        <insert tableName="filters">
+            <column name="name" value="High Value Orders"/>
+            <column name="created_at" valueDate="2024-01-01T00:00:00"/>
+        </insert>
+
+        <insert tableName="filter_criteria">
+            <column name="filter_id" valueComputed="(SELECT id FROM filters WHERE name = 'High Value Orders')"/>
+            <column name="type" value="AMOUNT"/>
+        </insert>
+
+        <insert tableName="amount_filter_criteria">
+            <column name="id" valueComputed="(SELECT id FROM filter_criteria WHERE filter_id = (SELECT id FROM filters WHERE name = 'High Value Orders') AND type='AMOUNT')"/>
+            <column name="condition_type" value="GREATER_OR_EQUAL"/>
+            <column name="amount_value" valueNumeric="1000"/>
+        </insert>
+
+        <insert tableName="filters">
+            <column name="name" value="Mixed Conditions Filter"/>
+            <column name="created_at" valueDate="2025-01-01T00:00:00"/>
+        </insert>
+
+        <insert tableName="filter_criteria">
+            <column name="filter_id" valueComputed="(SELECT id FROM filters WHERE name='Mixed Conditions Filter')"/>
+            <column name="type" value="AMOUNT"/>
+        </insert>
+
+        <insert tableName="amount_filter_criteria">
+            <column name="id" valueComputed="(SELECT id FROM filter_criteria WHERE filter_id=(SELECT id FROM filters WHERE name='Mixed Conditions Filter') AND type='AMOUNT')"/>
+            <column name="condition_type" value="GREATER_OR_EQUAL"/>
+            <column name="amount_value" valueNumeric="500"/>
+        </insert>
+
+        <insert tableName="filter_criteria">
+            <column name="filter_id" valueComputed="(SELECT id FROM filters WHERE name='Mixed Conditions Filter')"/>
+            <column name="type" value="TITLE"/>
+        </insert>
+
+        <insert tableName="title_filter_criteria">
+            <column name="id" valueComputed="(SELECT id FROM filter_criteria WHERE filter_id=(SELECT id FROM filters WHERE name='Mixed Conditions Filter') AND type='TITLE')"/>
+            <column name="condition_type" value="CONTAINS"/>
+            <column name="condition_value" value="Urgent"/>
+        </insert>
+
+        <insert tableName="filter_criteria">
+            <column name="filter_id" valueComputed="(SELECT id FROM filters WHERE name='Mixed Conditions Filter')"/>
+            <column name="type" value="DATE"/>
+        </insert>
+
+        <insert tableName="date_filter_criteria">
+            <column name="id" valueComputed="(SELECT id FROM filter_criteria WHERE filter_id=(SELECT id FROM filters WHERE name='Mixed Conditions Filter') AND type='DATE')"/>
+            <column name="condition_type" value="AFTER"/>
+            <column name="date" valueDate="2025-01-01"/>
+        </insert>
+
+    </changeSet>
+</databaseChangeLog>

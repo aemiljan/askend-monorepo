@@ -1,0 +1,82 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="1" author="aemiljan">
+
+        <createTable tableName="filters">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="pk_filters" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="filter_criteria">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="pk_filter_criteria" nullable="false"/>
+            </column>
+            <column name="filter_id" type="BIGINT">
+                <constraints nullable="false"
+                             foreignKeyName="fk_filter_criteria_filter"
+                             referencedTableName="filters"
+                             referencedColumnNames="id"/>
+            </column>
+            <column name="type" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="amount_filter_criteria">
+            <column name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="pk_amount_filter_criteria" nullable="false"
+                             foreignKeyName="fk_amount_filter_criteria"
+                             referencedTableName="filter_criteria"
+                             referencedColumnNames="id"/>
+            </column>
+            <column name="condition_type" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="amount_value" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="title_filter_criteria">
+            <column name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="pk_title_filter_criteria" nullable="false"
+                             foreignKeyName="fk_title_filter_criteria"
+                             referencedTableName="filter_criteria"
+                             referencedColumnNames="id"/>
+            </column>
+            <column name="condition_type" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="condition_value" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="date_filter_criteria">
+            <column name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="pk_date_filter_criteria" nullable="false"
+                             foreignKeyName="fk_date_filter_criteria"
+                             referencedTableName="filter_criteria"
+                             referencedColumnNames="id"/>
+            </column>
+            <column name="condition_type" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date" type="DATE">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+    </changeSet>
+</databaseChangeLog>
