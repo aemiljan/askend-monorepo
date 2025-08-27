@@ -1,0 +1,61 @@
+<div class="filter-dialog-container">
+  <form [formGroup]="form">
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Filter Name</mat-label>
+      <input matInput formControlName="name" />
+    </mat-form-field>
+
+    <div formArrayName="criteria" class="criteria-container">
+      <div *ngFor="let c of criteria.controls; let i = index" [formGroupName]="i" class="criteria-row">
+        <mat-form-field appearance="fill">
+          <mat-label>Type</mat-label>
+          <mat-select formControlName="filterType">
+            <mat-option value="AMOUNT">Amount</mat-option>
+            <mat-option value="TITLE">Title</mat-option>
+            <mat-option value="DATE">Date</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Condition</mat-label>
+          <mat-select formControlName="condition">
+            <mat-option *ngFor="let cond of getConditions(c.value.filterType)" [value]="cond">
+              {{ cond }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <ng-container [ngSwitch]="c.get('filterType')?.value">
+          <mat-form-field *ngSwitchCase="'AMOUNT'" appearance="fill">
+            <input matInput type="number" formControlName="value" placeholder="Amount">
+          </mat-form-field>
+
+          <mat-form-field *ngSwitchCase="'TITLE'" appearance="fill">
+            <input matInput type="text" formControlName="value" placeholder="Title">
+          </mat-form-field>
+
+          <mat-form-field *ngSwitchCase="'DATE'" appearance="fill">
+            <input matInput [matDatepicker]="picker" formControlName="value" placeholder="Choose date">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+        </ng-container>
+
+        <button mat-icon-button color="warn" type="button" (click)="removeCriteria(i)" *ngIf="criteria.length > 1">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    </div>
+
+    <button mat-button type="button" (click)="addCriteria()">
+      <mat-icon>add</mat-icon>
+      Add Criteria
+    </button>
+
+    <div class="actions" *ngIf="nonModal">
+      <button mat-raised-button color="primary" type="button" (click)="save()">Save</button>
+      <button mat-button type="button" (click)="cancel()">Cancel</button>
+      <button mat-button color="warn" type="button" *ngIf="currentFilterId" (click)="confirmDelete()">Delete</button>
+    </div>
+  </form>
+</div>

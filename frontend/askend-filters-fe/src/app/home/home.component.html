@@ -1,0 +1,28 @@
+<div class="container">
+  <h1>Filter Manager</h1>
+
+  <div class="header-controls">
+    <div *ngIf="filters.length === 0" class="no-filters">
+      <p>No filters yet.</p>
+    </div>
+    <div *ngIf="filters.length > 0">
+      <mat-form-field appearance="fill">
+        <mat-label>Select a Filter</mat-label>
+        <mat-select [(value)]="selectedFilterId" (selectionChange)="onFilterSelected($event.value)">
+          <mat-option *ngFor="let f of filters" [value]="f.id">{{ f.name }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <button mat-raised-button color="primary" (click)="onAddFilter()">Add Filter</button>
+  </div>
+
+  <app-filter-dialog
+    *ngIf="showInlineForm"
+    [filterId]="selectedFilterId"
+    [nonModal]="true"
+    (saved)="onFilterSaved()"
+    (deleted)="onFilterDeleted()"
+    (canceled)="onFilterCanceled()">
+  </app-filter-dialog>
+
+</div>

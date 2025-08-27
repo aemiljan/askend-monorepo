@@ -1,0 +1,39 @@
+.container {
+  width: 50rem;
+  margin: 0 auto;
+  padding: 1rem;
+  text-align: left;
+
+  h1 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+  }
+
+  .header-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+
+    mat-form-field {
+      width: 20rem;
+    }
+
+    button {
+      align-self: flex-start;
+    }
+  }
+
+  app-filter-dialog {
+    display: block;
+    margin-top: 1rem;
+  }
+}
+
+.no-filters {
+  margin-top: 2rem;
+  font-style: italic;
+  color: #666;
+}
