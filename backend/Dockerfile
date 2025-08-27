@@ -6,7 +6,7 @@ RUN gradle clean build -x test
 FROM eclipse-temurin:21
 WORKDIR /opt/app/
 
-COPY --from=build /opt/app/build/libs/energy-consumption-app-0.0.1-SNAPSHOT.jar /opt/app/app.jar
+COPY --from=build /opt/app/build/libs/askend-filters-0.0.1-SNAPSHOT.jar /opt/app/app.jar
 
 ENTRYPOINT ["java", "-jar", "/opt/app/app.jar"]
 EXPOSE 8080
