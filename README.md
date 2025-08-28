@@ -63,9 +63,11 @@ frontend/  # Angular application
 docker-compose.yml
 ```
 ## Requirements
+- Docker & Docker Compose
 
+### When running locally
 - Java 21
 - Node.js 20+
 - Angular CLI 17+
 - Gradle 8+
-- Docker & Docker Compose
+
